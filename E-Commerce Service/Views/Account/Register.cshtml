@@ -1,0 +1,105 @@
+﻿@model E_Commerce_Service.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Registrar";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Crie sua conta na E-Commerce Service! É rápido e fácil.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    if (ViewBag.PerfilNaoSelecionado == "-1")
+    {
+        <p class="text-danger">&bull; O perfil é obrigatório.</p>
+    }
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Nome, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Nome, new { @class = "form-control", @placeholder = "Nome" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Sobrenome, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Sobrenome, new { @class = "form-control", @placeholder = "Sobrenome" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Idade, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Idade, new { @class = "form-control", @placeholder = "Idade", @type = "number" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Senha" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control col-md-5", @placeholder = "Confirme a senha" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Perfil", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownList("TipoPefil", ViewBag.TipoPefil as SelectList, new { @class = "form-control col-md-5" })
+        </div>
+    </div>
+   
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input title="Registrar" type="submit" class="btn btn-outline-success" value="Registrar" />
+            
+            <input title="Cancelar" type="button" class="btn btn-outline-cancel" value="Cancelar" id="btnCancel" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div id="divResult" class="col-md-offset-2 col-md-6">
+
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/bundles/jqueryval") 
+@Scripts.Render("~/bundles/jquery")
+  
+<script>
+    $(document).ready(function () {
+        Init();
+    });
+
+    function Init() {
+        $("#btnCancel").click(clickCancel);
+    }
+
+    function clickCancel() {
+
+        var result = "";
+
+        result += '<div id="divAlert" class="alert alert-warning alert-dismissable">'
+                + '<a href="/Home/Index" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+                + '<strong>Alerta! </strong> Seu cadastro será cancelado. clique no "<strong> X </strong>" para confirmar.  ';
+
+        $("#divResult").html(result);
+
+        setTimeout(function () {
+            $('#divAlert').remove();
+        }, 7500);
+    }
+
+</script>

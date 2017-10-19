@@ -1,0 +1,83 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.btn-outline-success {
+    color: #2bc62b;
+    background-image: none;
+    background-color: transparent;
+    border-color: #2bc62b;
+}
+
+.btn-outline-generic {
+    color: #0705f6;
+    background-image: none;
+    background-color: transparent;
+    border-color: #0705f6;
+}
+
+.btn-outline-cancel {
+    color: #fb1212;
+    background-image: none;
+    background-color: transparent;
+    border-color: #fb1212;
+}
+
+.center-block {
+  display: block;
+  margin-left: 40%;
+}
+
+#slide { 
+    width: 1140px;
+    overflow: hidden; 
+    height: 300px;
+    margin: 20px auto;
+    box-shadow: 0 0 8px #000;
+    position: relative;
+}
+#slide img {
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+    display: none;
+    left: 0;
+}
+
+#slide a {
+    z-index:2;
+    position: absolute; 
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px; 
+    font-family: Arial; 
+    font-size: 20px; 
+    background: rgba(0,0,0,0.5);  
+    color: #fff;
+}
+
+.paddingFind{
+    padding: 5px; 
+}

@@ -1,0 +1,106 @@
+﻿@{
+    ViewBag.Title = "E-Commerce Service";
+}
+
+<br />
+        <form class="form-inline my-2 my-lg-0" action="" method="post">
+            <input class="form-control mr-sm-2" type="text" placeholder="encanador, pintor..." />
+            <button title="Pesquisar" class="btn btn-outline-success my-2 my-sm-0" type="submit">pesquisar</button>
+        </form>
+@*
+    <div class="jumbotron">
+        <h1>ASP.NET</h1>
+        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+        <p><a href="http://asp.net" class="btn btn-primary btn-xs">Learn more &raquo;</a></p>
+    </div>
+
+*@
+
+    <div id="slide">
+
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Serviços mais procurados</h2>
+            <p>
+                <div class="col-md-2">
+                    <h3><strong>1º </strong></h3>
+                </div>
+                <h3 class="col-md-9"><strong>Construção Civíl</strong></h3>
+                
+                <div class="col-md-2">
+                    <h4>2º </h4>
+                </div>
+                <h4 class="col-md-9">Serviço Escolar</h4>
+
+                <div class="col-md-2">
+                    <h5>3º </h5>
+                </div>
+                <h5 class="col-md-9">Domésticos</h5>
+            </p>
+            <p><a class="btn btn-outline-generic" href="http://go.microsoft.com/fwlink/?LinkId=301865">Todos os serviços &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Todos os serviços</h2>
+            <p>
+                Com a E-Commerce Service, além de cadastrar os seus serviços você também pode divulga-los 
+                em nossas zonas de destaque.
+                <br /> Consulte nossos planos!
+            </p>
+            <p><a class="btn btn-outline-generic" href="http://go.microsoft.com/fwlink/?LinkId=301866">Consultar planos &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Por que a E-Commerce Service irá mudar a forma como você resolve seus problemas?</h2>
+            <p>
+                Pensando sempre no cliente, a E-Commerce Service oferece diversos tipos de serviços online 
+                para que você possa resolver os seus problemas sem se preocupar em sair da sua casa! 
+                É inteligente, é E-Commerce Service!
+            </p>
+            <p><a class="btn btn-outline-generic" href="/Home/About">Leia mais &raquo;</a></p>
+        </div>
+    </div>
+
+@Scripts.Render("~/bundles/jquery")
+
+<script>
+
+    $(document).ready(function () {
+
+        Init();
+        CarregaSlide();
+
+    });
+
+    function Init() {
+        var imagens = "";
+        imagens += '<img src ="/Content/01.jpg" alt="Batman">'
+                + '<img src ="/Content/02.jpg" alt="Montanha">'
+                + '<img src ="/Content/03.jpg" alt="Céu">';
+
+        $("#slide").html(imagens);
+    }
+
+    function CarregaSlide() {
+        $("#slide img:eq(0)").addClass("ativo").show();
+
+        var texto = $(".ativo").attr("alt");
+        $("#slide").prepend('<a href="/Home/About">' + texto + '</a>');
+
+        setInterval(slide, 5000);
+    }
+
+    function slide() {
+
+        if ($(".ativo").next().size()) {
+            $(".ativo").fadeOut().removeClass("ativo").next().fadeIn().addClass("ativo");
+        } else {
+            $(".ativo").fadeOut().removeClass("ativo");
+            $("#slide img:eq(0)").fadeIn().addClass("ativo");
+        }
+
+        var texto = $(".ativo").attr("alt");
+        $("#slide a").hide().html(texto).delay(500).fadeIn();
+    }
+
+</script>

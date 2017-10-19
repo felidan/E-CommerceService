@@ -1,0 +1,90 @@
+﻿
+@model IEnumerable<E_Commerce_Service.Models.FiltroViewModels>
+@Styles.Render("~/Content/Font-Awesome/css")
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br />
+<div id="gridResultado">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(m => m.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.NmUsuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.IdadeUsuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.EmailUsuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.PerfilUsuario)
+            </th>
+            <td>
+                <strong>Bloquear/Desbloquear</strong>
+            </td>
+        </tr>
+        
+        @foreach (var item in Model)
+        {    
+            <tr>
+                <td>
+                    @Html.DisplayFor(m => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.NmUsuario)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.IdadeUsuario)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.EmailUsuario)
+                </td>
+                                
+                <td>
+                    @if (item.PerfilUsuario.ToString().Trim() == "1")
+                    {
+                        <p>Contrata Serviço</p>
+                    }
+                    else if (item.PerfilUsuario.ToString().Trim() == "0")
+                    {
+                        <p>administrador</p>
+                    }
+                    else
+                    {
+                        <p>Oferece Serviço</p>
+                    }
+
+                </td>
+                <td>
+                    <button id="look_@item.Id" class="btn btn-danger fa fa-lock" aria-hidden="true" title="Desbloquear"></button>
+                    <button id="unlock_@item.Id" class="btn btn-success fa fa-unlock-alt" aria-hidden="true" title="Bloquear"></button>
+                </td>
+            </tr>
+        }
+        
+    </table>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+
+<script>
+
+    $(document).ready(function () {
+        Init();
+        $('.fa-lock').click(Troca);
+        $('.fa-unlock-alt').click(Troca);
+
+    });
+    // href="/Administrador/Manutencao"
+    function Troca() {
+        $('.fa-lock').toggle();
+        $('.fa-unlock-alt').toggle();
+    }
+    function Init() {
+        $('.fa-unlock-alt').toggle();
+
+    }
+
+</script>

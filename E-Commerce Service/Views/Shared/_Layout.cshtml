@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @using Microsoft.AspNet.Identity
+</head>
+<body>
+           
+           <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("E-Commerce Services", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    
+                    <ul class="nav navbar-nav">
+                    @*
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Serviços <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Cadastrar Amigo", "CadastrarAmigo", "Cadastro")</li>
+                            <li role="separator" class="divider"></li>
+                            <li>@Html.ActionLink("Listar Amigos", "ListarAmigos", "ListarAmigos")</li>
+                        </ul>
+                    </li>
+                    *@
+                        <li>@Html.ActionLink("Serviços", "Index", "Servicos")</li>
+                        <li>@Html.ActionLink("Parceiros", "Contact", "Home")</li>
+                        <li>@Html.ActionLink("Sobre", "About", "Home")</li> 
+
+
+                        @if (Request.IsAuthenticated)
+                        {
+                            if (User.Identity.Name == "Admin")
+                            {
+
+                            }
+                        }
+
+                        <li>@Html.ActionLink("Administrador", "Index", "Administrador")</li>
+                    </ul>
+
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>
+    
+    <div class="container body-content">
+        
+        @RenderBody()
+        <hr />
+        <footer>
+            <p class="center-block">&copy; @DateTime.Now.Year - E-Commerce Services</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
