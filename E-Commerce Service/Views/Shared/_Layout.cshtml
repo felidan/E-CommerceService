@@ -23,30 +23,25 @@
                 <div class="navbar-collapse collapse">
                     
                     <ul class="nav navbar-nav">
-                    @*
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Serviços <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Cadastrar Amigo", "CadastrarAmigo", "Cadastro")</li>
-                            <li role="separator" class="divider"></li>
-                            <li>@Html.ActionLink("Listar Amigos", "ListarAmigos", "ListarAmigos")</li>
-                        </ul>
-                    </li>
-                    *@
+                    
                         <li>@Html.ActionLink("Serviços", "Index", "Servicos")</li>
                         <li>@Html.ActionLink("Parceiros", "Contact", "Home")</li>
                         <li>@Html.ActionLink("Sobre", "About", "Home")</li> 
 
-
-                        @if (Request.IsAuthenticated)
+                        @if (Server.HtmlEncode(Request.Cookies["userPerfil"].Value.ToString()) == "0")
                         {
-                            if (User.Identity.Name == "Admin")
-                            {
-
-                            }
+                            <li class="dropdown" style="background-color: #94354d; opacity: initial">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administrador  <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Usuários", "Index", "Administrador")</li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>@Html.ActionLink("Gerenciamento de propaganda", "Index", "Administrador")</li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>@Html.ActionLink("Dados", "Index", "Administrador")</li>
+                                </ul>
+                            </li>
                         }
 
-                        <li>@Html.ActionLink("Administrador", "Index", "Administrador")</li>
                     </ul>
 
                     @Html.Partial("_LoginPartial")

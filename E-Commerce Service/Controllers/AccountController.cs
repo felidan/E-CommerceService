@@ -200,6 +200,11 @@ namespace E_Commerce_Service.Controllers
                 {
                     if (_userService.InsUsuario(model, TipoPefil))
                     {
+                        Response.Cookies["userLogado"].Value = "1";
+                        Response.Cookies["userName"].Value = model.Nome.ToString();
+                        Response.Cookies["userEmail"].Value = model.Email.ToString();
+                        Response.Cookies["userPerfil"].Value = TipoPefil.ToString();
+
                         return RedirectToAction("Index", "Home");
                     }
                 }
