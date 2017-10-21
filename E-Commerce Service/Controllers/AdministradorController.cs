@@ -10,8 +10,8 @@ namespace E_Commerce_Service.Controllers
 {
     public class AdministradorController : Controller
     {
+        #region [Administrador]
 
-        // GET: Administrador
         public ActionResult Index(string Nome = "", string Email = "")
         {
             List<FiltroViewModels> usuarios = new List<FiltroViewModels>();
@@ -21,9 +21,11 @@ namespace E_Commerce_Service.Controllers
             
             if (Request.IsAjaxRequest())
             {
-                return PartialView("_PartialGridResultado", usuarios); // passar a lista
+                return PartialView("_PartialGridResultado", usuarios);
             }
-            return View(usuarios); // passar a lista
+            return View(usuarios);
         }
+
+        #endregion [Administrador]
     }
 }

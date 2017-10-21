@@ -3,7 +3,7 @@
 {
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Olá " + Server.HtmlEncode(Request.Cookies["userName"].Value) + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Sua conta" })
+            @Html.ActionLink("Olá, " + Server.HtmlEncode(Request.Cookies["userName"].Value) + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Sua conta" })
         </li>
                 
         <li>

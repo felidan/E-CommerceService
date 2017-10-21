@@ -1,0 +1,35 @@
+﻿@model IEnumerable<E_Commerce_Service.Models.FiltroMyServiceViewModel>
+@{
+    ViewBag.Title = "Meus Serviços";
+}
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryAjax")
+@Styles.Render("~/Content/css")
+
+<h2>Meus Serviços</h2>
+
+<hr />
+<div>
+    @using (Ajax.BeginForm("MyServices", "Servicos", new AjaxOptions { HttpMethod = "Get", InsertionMode = InsertionMode.Replace, UpdateTargetId = "gridResultado" }))
+    {
+
+        <div class="form-group paddingFind">
+            @Html.Label("Nome do serviço", new { @class = "col-md-2 control-label paddingFind" })
+            <div class="col-md-10 paddingFind">
+                @Html.TextBox("Nome", "", new { @class = "form-control paddingFind" })
+            </div>
+        </div>
+
+        <div class="form-group paddingFind">
+            <div class="col-md-offset-2 col-md-10 paddingFind">
+                <input title="Pesquisar" type="submit" class="btn btn-outline-success" value="Pesquisar" />
+                <input title="Novo" type="submit" class="btn btn-outline-generic" value="Novo" />
+            </div>
+        </div>
+    }
+</div>
+
+<p><br /><hr /></p>
+
+@Html.Partial("_PartialGridMyServices", Model)

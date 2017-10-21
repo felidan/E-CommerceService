@@ -24,9 +24,10 @@
                     
                     <ul class="nav navbar-nav">
                     
-                        <li>@Html.ActionLink("Serviços", "Index", "Servicos")</li>
-                        <li>@Html.ActionLink("Parceiros", "Contact", "Home")</li>
-                        <li>@Html.ActionLink("Sobre", "About", "Home")</li> 
+                        @if (Server.HtmlEncode(Request.Cookies["userPerfil"].Value.ToString()) == "2")
+                        {
+                            <li style="background-color: #21456d; opacity:initial">@Html.ActionLink("Meus Serviços", "MyServices", "Servicos")</li>
+                        }
 
                         @if (Server.HtmlEncode(Request.Cookies["userPerfil"].Value.ToString()) == "0")
                         {
@@ -41,6 +42,12 @@
                                 </ul>
                             </li>
                         }
+
+                        <li>@Html.ActionLink("Serviços", "Index", "Servicos")</li>
+                        <li>@Html.ActionLink("Parceiros", "Contact", "Home")</li>
+                        <li>@Html.ActionLink("Sobre", "About", "Home")</li> 
+
+                        
 
                     </ul>
 

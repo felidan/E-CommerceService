@@ -23,7 +23,8 @@
     <div class="row">
         <div class="col-md-4">
             <h2>Serviços mais procurados</h2>
-            <p>
+            <div id="idRanking"></div>
+            <p id="idListaRanking">
                 <div class="col-md-2">
                     <h3><strong>1º </strong></h3>
                 </div>
@@ -39,7 +40,7 @@
                 </div>
                 <h5 class="col-md-9">Domésticos</h5>
             </p>
-            <p><a class="btn btn-outline-generic" href="http://go.microsoft.com/fwlink/?LinkId=301865">Todos os serviços &raquo;</a></p>
+            <p><a class="btn btn-outline-generic" href="/Servicos/Index">Todos os serviços &raquo;</a></p>
         </div>
         <div class="col-md-4">
             <h2>Todos os serviços</h2>
@@ -61,6 +62,7 @@
         </div>
     </div>
 
+
 @Scripts.Render("~/bundles/jquery")
 
 <script>
@@ -69,6 +71,7 @@
 
         Init();
         CarregaSlide();
+        LoadRanking();
 
     });
 
@@ -101,6 +104,19 @@
 
         var texto = $(".ativo").attr("alt");
         $("#slide a").hide().html(texto).delay(500).fadeIn();
+    }
+
+    function LoadRanking() {
+
+        var load = "";
+
+        load += '<br/>'
+            + '<img class="center-block" src="/Content/load.gif" title="Carregando...">'
+            + '<br/>'
+            + '<div class="center-block"><strong>Carregando..</strong></div>';
+
+        $('#idRanking').html(load).show();
+        
     }
 
 </script>

@@ -1,0 +1,71 @@
+﻿@model IEnumerable<E_Commerce_Service.Models.FiltroMyServiceViewModel>
+@Styles.Render("~/Content/Font-Awesome/css")
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<br />
+
+<div id="gridResultado">
+    <table class="table table-hover table-condensed table-striped">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(m => m.CategoriaServico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.DsServico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.FlPropaganda)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.VlServico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.NotaServico)
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(m => item.CategoriaServico)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.DsServico)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.FlPropaganda)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.VlServico)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.NotaServico)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+
+<script>
+
+    $(document).ready(function () {
+        Init();
+        $('.fa-lock').click(Troca);
+        $('.fa-unlock-alt').click(Troca);
+
+    });
+    // href="/Administrador/Manutencao"
+    function Troca() {
+        $('.fa-lock').toggle();
+        $('.fa-unlock-alt').toggle();
+    }
+    function Init() {
+        $('.fa-unlock-alt').toggle();
+
+    }
+
+</script>
