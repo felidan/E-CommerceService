@@ -62,6 +62,37 @@ namespace E_Commerce_Service.GlobalServices
             return user;
         }
 
+        public bool ValidaExistenciaUsuario(RegisterViewModel user)
+        {
+            HSSFWorkbook work = new HSSFWorkbook();
+            BDService bd = new BDService();
+            ISheet sheet = null;
+            IRow row = null;
+            ICell cellEmail = null;
+
+            work = bd.BDInit();
+            sheet = bd.BDGetFolha(work, "USUARIO");
+            row = sheet.GetRow(1);
+
+            for (int linha = 1; linha <= sheet.LastRowNum; linha++)
+            {
+                if (row != null)
+                {
+                    row = sheet.GetRow(linha);
+                    cellEmail = row.GetCell(4);
+
+                    if (user.Email.ToString().Trim().ToLower() == cellEmail.ToString().Trim().ToLower())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            bd.BDClose(work);
+
+            return false;
+        }
+
         public List<UsuarioModels> GetUsuarioPorNome(ISheet sheet, string nome)
         {
             List<UsuarioModels> usuario = new List<UsuarioModels>();

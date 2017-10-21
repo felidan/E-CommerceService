@@ -82,7 +82,7 @@ namespace E_Commerce_Service.Models
         public string Email { get; set; }
 
         [Required]
-        //[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "A senha deve ter no mínimo 6 caracteres.")]
         [DataType(DataType.Password)]
         [Display(Name = "Senha")]
         public string Password { get; set; }

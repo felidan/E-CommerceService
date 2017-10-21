@@ -5,3 +5,33 @@
 
 <h2>Serviços</h2>
 
+<hr />
+<div>
+    @using (Ajax.BeginForm("Index", "Administrador", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "gridResultado" }))
+    {
+
+        <div class="form-group paddingFind">
+            @Html.Label("Qual serviço deseja ?", new { @class = "col-md-2 control-label paddingFind" })
+            <div class="col-md-10 paddingFind">
+                @Html.TextBox("Nome", "", new { @class = "form-control paddingFind" })
+            </div>
+        </div>
+
+        <div class="form-group paddingFind">
+            @Html.Label("Email", new { @class = "col-md-2 control-label paddingFind" })
+            <div class="col-md-10 paddingFind">
+                @Html.TextBox("Email", "", new { @class = "form-control paddingFind" })
+            </div>
+        </div>
+
+        <div class="form-group paddingFind">
+            <div class="col-md-offset-2 col-md-10 paddingFind">
+                <input title="Pesquisar" type="submit" class="btn btn-outline-success" value="Pesquisar" />
+            </div>
+        </div>
+    }
+</div>
+
+<p><br /><hr /></p>
+
+

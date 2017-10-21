@@ -16,6 +16,10 @@
     {
         <p class="text-danger">&bull; O perfil é obrigatório.</p>
     }
+    if (ViewBag.UsuarioExistente != "-1")
+    {
+        <p class="text-danger">&bull; @ViewBag.UsuarioExistente</p>
+    }
 
     <div class="form-group">
         @Html.LabelFor(m => m.Nome, new { @class = "col-md-2 control-label" })
@@ -91,7 +95,7 @@
 
         var result = "";
 
-        result += '<div id="divAlert" class="alert alert-warning alert-dismissable">'
+        result += '<div hidden="true" id="divAlert" class="alert alert-warning alert-dismissable">'
                 + '<a href="/Home/Index" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
                 + '<strong>Alerta! </strong> Seu cadastro será cancelado. clique no "<strong> X </strong>" para confirmar.  ';
 

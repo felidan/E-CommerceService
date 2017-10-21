@@ -10,9 +10,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using E_Commerce_Service.Models;
 using E_Commerce_Service.GlobalServices;
-using NPOI.XSSF.UserModel;
-using System.IO;
-using NPOI.SS.UserModel;
 
 namespace E_Commerce_Service.Controllers
 {
@@ -57,20 +54,30 @@ namespace E_Commerce_Service.Controllers
             }
         }
 
-        //
-        // GET: /Account/Login
+        #region [login]
+
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
+            Response.Cookies["userLogado"].Value = "-1";
+            Response.Cookies["userName"].Value = "";
+            Response.Cookies["userEmail"].Value = "";
+            Response.Cookies["userPerfil"].Value = "";
+
+            if (returnUrl == null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
-        
-        // POST: /Account/Login
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             UsuarioModels user = new UsuarioModels();
 
@@ -85,29 +92,12 @@ namespace E_Commerce_Service.Controllers
             {
                 if (user.SenhaUsuario == model.Password)
                 {
-                    var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+                    Response.Cookies["userLogado"].Value = "1";
+                    Response.Cookies["userName"].Value = user.NmUsuario.ToString();
+                    Response.Cookies["userEmail"].Value = user.EmailUsuario.ToString();
+                    Response.Cookies["userPerfil"].Value = user.TpUsuario.ToString();
 
-                    if(result != SignInStatus.Success)
-                    {
-                        var usuario = new ApplicationUser { UserName = user.NmUsuario, Email = model.Email, PhoneNumber = user.TpUsuario };
-                        var resultado = await UserManager.CreateAsync(usuario, model.Password);
-                    }
-
-                    result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-                    
-                    switch (result)
-                    {
-                        case SignInStatus.Success:
-                            return RedirectToLocal(returnUrl);
-                        case SignInStatus.LockedOut:
-                            return View("Lockout");
-                        case SignInStatus.RequiresVerification:
-                            return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                        case SignInStatus.Failure:
-                        default:
-                            ModelState.AddModelError("", "Tentativa de login inválida.");
-                            return View(model);
-                    }
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -119,11 +109,13 @@ namespace E_Commerce_Service.Controllers
             {
                 ModelState.AddModelError("", "Usuário não encontrado.");
                 return View(model);
-            }  
+            }
         }
 
-        //
-        // GET: /Account/VerifyCode
+        #endregion [login]
+
+        #region [VerifyCode]
+
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
@@ -135,8 +127,6 @@ namespace E_Commerce_Service.Controllers
             return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
-        //
-        // POST: /Account/VerifyCode
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -151,7 +141,7 @@ namespace E_Commerce_Service.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -164,8 +154,11 @@ namespace E_Commerce_Service.Controllers
                     return View(model);
             }
         }
+
+        #endregion [VerifyCode]
         
-        // GET: /Account/Register
+        #region [Registrar]
+
         [AllowAnonymous]
         public ActionResult Register()
         {
@@ -175,15 +168,16 @@ namespace E_Commerce_Service.Controllers
                     "IdPerfil",
                     "DsPerfil"
                 );
+
             ViewBag.PerfilNaoSelecionado = "0";
+            ViewBag.UsuarioExistente = "-1";
             return View();
         }
-        
-        // POST: /Account/Register
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model, string TipoPefil)
+        public ActionResult Register(RegisterViewModel model, string TipoPefil)
         {
             ViewBag.PerfilNaoSelecionado = "0";
             if (TipoPefil == "-1")
@@ -198,21 +192,27 @@ namespace E_Commerce_Service.Controllers
                 return View(model);
             }
 
+            ViewBag.UsuarioExistente = "-1";
+
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Nome, Email = model.Email, PhoneNumber = TipoPefil }; // PhoneNumber = "1"
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (!_userService.ValidaExistenciaUsuario(model))
                 {
-                    if( _userService.InsUsuario(model, TipoPefil) )
+                    if (_userService.InsUsuario(model, TipoPefil))
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
                         return RedirectToAction("Index", "Home");
                     }
                 }
 
-                AddErrors(result);
+                ViewBag.TipoPefil = new SelectList
+                (
+                    new TipoPerfilModels().ListaPerfil(),
+                    "IdPerfil",
+                    "DsPerfil"
+                );
+
+                ViewBag.UsuarioExistente = "Email já cadastrado.";
+                return View(model);
             }
 
             ViewBag.TipoPefil = new SelectList
@@ -221,11 +221,12 @@ namespace E_Commerce_Service.Controllers
                     "IdPerfil",
                     "DsPerfil"
                 );
-            
+
             return View(model);
         }
-        
-        // GET: /Account/ConfirmEmail
+
+        #endregion [Registrar]
+
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
@@ -236,15 +237,15 @@ namespace E_Commerce_Service.Controllers
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
-        
-        // GET: /Account/ForgotPassword
+       
+        #region [Senha]
+
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
             return View();
         }
-        
-        // POST: /Account/ForgotPassword
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -270,22 +271,19 @@ namespace E_Commerce_Service.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-        
-        // GET: /Account/ForgotPasswordConfirmation
+
         [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
         {
             return View();
         }
-        
-        // GET: /Account/ResetPassword
+
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
             return code == null ? View("Error") : View();
         }
-        
-        // POST: /Account/ResetPassword
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -309,16 +307,15 @@ namespace E_Commerce_Service.Controllers
             AddErrors(result);
             return View();
         }
-        
-        // GET: /Account/ResetPasswordConfirmation
+
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
         {
             return View();
         }
 
-        //
-        // POST: /Account/ExternalLogin
+        #endregion [Senha]
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -328,8 +325,6 @@ namespace E_Commerce_Service.Controllers
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
-        //
-        // GET: /Account/SendCode
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
@@ -343,8 +338,6 @@ namespace E_Commerce_Service.Controllers
             return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
-        //
-        // POST: /Account/SendCode
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -363,8 +356,6 @@ namespace E_Commerce_Service.Controllers
             return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
         }
 
-        //
-        // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
@@ -374,7 +365,6 @@ namespace E_Commerce_Service.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Sign in the user with this external login provider if the user already has a login
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
             {
@@ -393,8 +383,6 @@ namespace E_Commerce_Service.Controllers
             }
         }
 
-        //
-        // POST: /Account/ExternalLoginConfirmation
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -431,18 +419,16 @@ namespace E_Commerce_Service.Controllers
             return View(model);
         }
 
-        //
-        // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            Response.Cookies["userLogado"].Value = "-1";
+            Response.Cookies["userName"].Value = "";
+            Response.Cookies["userEmail"].Value = "";
+            Response.Cookies["userPerfil"].Value = "";
+
             return RedirectToAction("Index", "Home");
         }
 
-        //
-        // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
         {
@@ -484,9 +470,9 @@ namespace E_Commerce_Service.Controllers
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
-            {
+           {
                 ModelState.AddModelError("", error);
-            }
+           }
         }
 
         private ActionResult RedirectToLocal(string returnUrl)
