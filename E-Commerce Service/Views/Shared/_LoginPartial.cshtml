@@ -1,14 +1,24 @@
 ﻿
-@if(Server.HtmlEncode(Request.Cookies["userLogado"].Value.ToString()) == "1")
+@if (Request.Cookies["userLogado"] != null)
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Olá, " + Server.HtmlEncode(Request.Cookies["userName"].Value) + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Sua conta" })
-        </li>
-                
-        <li>
-            <a href="/Account/LogOff">Sair</a>
-    </ul>
+    if (Server.HtmlEncode(Request.Cookies["userLogado"].Value.ToString()) == "1")
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @Html.ActionLink("Olá, " + Server.HtmlEncode(Request.Cookies["userName"].Value) + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Sua conta" })
+            </li>
+
+            <li>
+                <a href="/Account/LogOff">Sair</a>
+        </ul>
+    }
+    else
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink("Registrar", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+            <li>@Html.ActionLink("Entrar", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        </ul>
+    }
 }
 else
 {
@@ -17,6 +27,7 @@ else
         <li>@Html.ActionLink("Entrar", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
     </ul>
 }
+
 
 @Scripts.Render("~/bundles/jquery")
 

@@ -12,10 +12,31 @@ namespace E_Commerce_Service.Controllers
     {
         #region [Serviços]
 
-        public ActionResult Index()
+        public ActionResult Index(bool ckPreco = false, bool ckDistancia = false, bool ckAvaliacao = false, string Categorias = "-1")
         {
-            return View();
+            List<ServicosGeraisViewModel> servicos = new List<ServicosGeraisViewModel>();
+            ServicosServices _service = new ServicosServices();
+
+            ViewBag.Categorias = new SelectList( _service.GetListCategorias(), "IdCategoria", "DsCategoria");
+
+            if(Categorias == "-1")
+            {
+                servicos = _service.GetListServicos();
+            }
+            else
+            {
+                servicos = _service.GetListServicos().Where(x => x.Categoria == Categorias).ToList();
+            }
+
+            servicos = _service.CalculaRating(servicos, ckPreco, ckDistancia, ckAvaliacao).OrderByDescending(x => x.RatingServico).ToList();
+
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_PartionGridServicosGerais", servicos);
+            }
+            return View(servicos);
         }
+
 
         #endregion [Serviços]
 

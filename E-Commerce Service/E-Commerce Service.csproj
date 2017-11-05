@@ -228,7 +228,9 @@
     <Compile Include="Models\FiltroMyServiceViewModel.cs" />
     <Compile Include="Models\FiltroViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ListCategoria.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ServicosGeraisViewModel.cs" />
     <Compile Include="Models\TipoPerfilModels.cs" />
     <Compile Include="Models\UsuarioModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -307,6 +309,7 @@
     <Content Include="Views\Servicos\Index.cshtml" />
     <Content Include="Views\Servicos\MyServices.cshtml" />
     <Content Include="Views\Servicos\_PartialGridMyServices.cshtml" />
+    <Content Include="Views\Servicos\_PartionGridServicosGerais.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

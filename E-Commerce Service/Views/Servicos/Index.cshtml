@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<E_Commerce_Service.Models.ServicosGeraisViewModel>
 @{
     ViewBag.Title = "Serviços";
 }
@@ -7,20 +7,32 @@
 
 <hr />
 <div>
-    @using (Ajax.BeginForm("Index", "Administrador", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "gridResultado" }))
+    @using (Ajax.BeginForm("Index", "Servicos", new AjaxOptions { HttpMethod = "Post", InsertionMode = InsertionMode.Replace, UpdateTargetId = "gridResultado" }))
     {
 
         <div class="form-group paddingFind">
-            @Html.Label("Qual serviço deseja ?", new { @class = "col-md-2 control-label paddingFind" })
+            @Html.Label("Categoria", new { @class = "col-md-2 control-label paddingFind" })
             <div class="col-md-10 paddingFind">
-                @Html.TextBox("Nome", "", new { @class = "form-control paddingFind" })
+                @Html.DropDownList("Categorias", ViewBag.Categorias as SelectList, new { @class = "form-control paddingFind" })
+                
             </div>
         </div>
-
+        
         <div class="form-group paddingFind">
-            @Html.Label("Email", new { @class = "col-md-2 control-label paddingFind" })
+            @Html.Label("Relevância", new { @class = "col-md-2 control-label paddingFind" })
             <div class="col-md-10 paddingFind">
-                @Html.TextBox("Email", "", new { @class = "form-control paddingFind" })
+                <label class="checkbox-inline">
+                    @Html.CheckBox("ckPreco", false, new { @class = "" })
+                    Preço
+                </label>
+                <label class="checkbox-inline">
+                    @Html.CheckBox("ckDistancia", false, new { @class = "" })
+                    Distância
+                </label>
+                <label class="checkbox-inline">
+                    @Html.CheckBox("ckAvaliacao", false, new { @class = "" })
+                    Avaliação
+                </label>
             </div>
         </div>
 
@@ -33,3 +45,6 @@
 </div>
 
 <p><br /><hr /></p>
+
+
+@Html.Partial("_PartionGridServicosGerais", Model)

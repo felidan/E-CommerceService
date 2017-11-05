@@ -1,0 +1,76 @@
+﻿
+@model IEnumerable<E_Commerce_Service.Models.ServicosGeraisViewModel>
+@Styles.Render("~/Content/Font-Awesome/css")
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br />
+<div id="gridResultado">
+    <table class="table table-hover table-condensed table-striped">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(m => m.NmServico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.DsCategoria)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.PrecoServico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.DistanciaServico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.NotaServico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.RatingServico)
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr value="teste">
+                <td>
+                    @Html.DisplayFor(m => item.NmServico)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.DsCategoria)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.PrecoServico)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.DistanciaServico)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.NotaServico)
+                </td>
+                <td>
+                    @{
+                        decimal rating = item.RatingServico * 100 / 5;
+
+                        <div>
+                            <div class="progress" title="@item.RatingServico">
+                                <div class="progress-bar-mod progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="5" style="width:@rating%">
+                                    @Html.DisplayFor(m => item.RatingServico)
+                                </div>
+                            </div>
+                        </div>
+                   
+                    }
+                    
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+
+<script>
+
+    $(document).ready(function () {
+        
+    });
+
+</script>

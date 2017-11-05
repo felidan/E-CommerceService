@@ -149,5 +149,150 @@ namespace E_Commerce_Service.GlobalServices
 
             return lista;
         }
+
+        public List<ListCategoria> GetListCategorias()
+        {
+            HSSFWorkbook plan = new HSSFWorkbook();
+            ISheet sheet = null;
+            IRow row = null;
+            BDService server = new BDService();
+            List<ListCategoria> lista = new List<ListCategoria>();
+            ListCategoria _listCateg = new ListCategoria();
+            ICell Id = null;
+            ICell DsCategoria = null;
+
+            plan = server.BDInit();
+            sheet = server.BDGetFolha(plan, "TP_SERVICO");
+
+            row = sheet.GetRow(1);
+
+            _listCateg.IdCategoria = -1;
+            _listCateg.DsCategoria = "Selecione";
+
+            lista.Add(_listCateg);
+
+            for (int linha = 1; linha <= sheet.LastRowNum; linha++)
+            {
+                row = sheet.GetRow(linha);
+
+                if (row != null)
+                {
+                    _listCateg = new ListCategoria();
+
+                    Id = row.GetCell(0);
+                    DsCategoria = row.GetCell(1);
+
+                    _listCateg.IdCategoria = Int32.Parse(Id.ToString());
+                    _listCateg.DsCategoria = DsCategoria.ToString();
+
+                    lista.Add(_listCateg);
+                }
+                
+            }
+
+            server.BDClose(plan);
+
+            return lista;
+        }
+
+        private string GetListCategoriasPorId(int IdServico)
+        {
+            HSSFWorkbook plan = new HSSFWorkbook();
+            ISheet sheet = null;
+            IRow row = null;
+            BDService server = new BDService();
+            List<ListCategoria> lista = new List<ListCategoria>();
+            ListCategoria _listCateg = new ListCategoria();
+            ICell Id = null;
+            ICell DsCategoria = null;
+
+            plan = server.BDInit();
+            sheet = server.BDGetFolha(plan, "TP_SERVICO");
+
+            row = sheet.GetRow(1);
+
+
+            for (int linha = 1; linha <= sheet.LastRowNum; linha++)
+            {
+                row = sheet.GetRow(linha);
+
+                if (row != null)
+                {
+                    Id = row.GetCell(0);
+                    DsCategoria = row.GetCell(1);
+
+                    if(Id.ToString() == IdServico.ToString())
+                    {
+                        server.BDClose(plan);
+                        return DsCategoria.ToString();
+                    }
+                }
+            }
+
+            server.BDClose(plan);
+
+            return null;
+        }
+
+        public List<ServicosGeraisViewModel> GetListServicos()
+        {
+            List<ServicosGeraisViewModel> lista = new List<ServicosGeraisViewModel>();
+            HSSFWorkbook plan = new HSSFWorkbook();
+            ISheet sheet = null;
+            IRow row = null;
+            ICell IdServico = null;
+            ICell NmServico = null;
+            ICell VlServico = null;
+            ICell DistanciaServico = null;
+            ICell NotaServico = null;
+            ICell Categoria = null;
+
+            BDService server = new BDService();
+            ServicosGeraisViewModel _list = new ServicosGeraisViewModel();
+
+            plan = server.BDInit();
+            sheet = server.BDGetFolha(plan, "SERVICOS");
+
+            row = sheet.GetRow(1);
+            
+            for (int linha = 1; linha <= sheet.LastRowNum; linha++)
+            {
+                row = sheet.GetRow(linha);
+
+                if (row != null)
+                {
+                    _list = new ServicosGeraisViewModel();
+
+                    IdServico = row.GetCell(0);
+                    NmServico = row.GetCell(2);
+                    VlServico = row.GetCell(9);
+                    DistanciaServico = row.GetCell(11);
+                    NotaServico = row.GetCell(10);
+                    Categoria = row.GetCell(1);
+
+                    _list.Id = Int32.Parse(IdServico.ToString());
+                    _list.NmServico = NmServico.ToString();
+                    _list.PrecoServico = Decimal.Parse(VlServico.ToString());
+                    _list.DistanciaServico = float.Parse(DistanciaServico.ToString());
+                    _list.NotaServico = Decimal.Parse(NotaServico.ToString());
+                    _list.Categoria = Categoria.ToString();
+                    var tpServico = GetListCategoriasPorId(Int32.Parse(Categoria.ToString()));
+                    if (tpServico != null)
+                    {
+                        _list.DsCategoria = tpServico;
+                    }
+                    lista.Add(_list);
+
+                }
+            }
+            server.BDClose(plan);
+
+            return lista;
+        }
+
+        public List<ServicosGeraisViewModel> CalculaRating(List<ServicosGeraisViewModel> servicos, bool ckPreco, bool ckDistancia, bool ckAvaliacao)
+        {
+            return servicos;
+        }
     }
 }
