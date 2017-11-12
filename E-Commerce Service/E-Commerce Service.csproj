@@ -226,6 +226,7 @@
     <Compile Include="GlobalServices\RatingService.cs" />
     <Compile Include="GlobalServices\ServicosServices.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ContrataServicoViewModels.cs" />
     <Compile Include="Models\FiltroMyServiceViewModel.cs" />
     <Compile Include="Models\FiltroViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />

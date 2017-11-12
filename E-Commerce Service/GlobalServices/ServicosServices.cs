@@ -337,5 +337,214 @@ namespace E_Commerce_Service.GlobalServices
             bd.BDClose(work);
             return false;
         }
+
+        public List<ServicosGeraisViewModel> CarregaRanking()
+        {
+            List<ServicosGeraisViewModel> ranking = new List<ServicosGeraisViewModel>();
+            ServicosGeraisViewModel _list = new ServicosGeraisViewModel();
+
+            HSSFWorkbook plan = new HSSFWorkbook();
+            ISheet sheet = null;
+            IRow row = null;
+            BDService server = new BDService();
+            
+            ICell Id = null;
+            ICell DsServico = null;
+
+            plan = server.BDInit();
+            sheet = server.BDGetFolha(plan, "SERVICOS");
+
+            row = sheet.GetRow(1);
+
+            for (int linha = 1; linha <= sheet.LastRowNum; linha++)
+            {
+                row = sheet.GetRow(linha);
+
+                if (row != null)
+                {
+                    _list = new ServicosGeraisViewModel();
+
+                    Id = row.GetCell(4);
+                    DsServico = row.GetCell(2);
+
+                    _list.Id = Int32.Parse(Id.ToString());
+                    _list.NmServico = DsServico.ToString();
+
+                    ranking.Add(_list);
+                }
+
+            }
+
+            List<ServicosGeraisViewModel> aux = new List<ServicosGeraisViewModel>();
+            aux = ranking.OrderByDescending(x => x.Id).ToList();
+
+            ranking.Clear();
+            ranking = new List<ServicosGeraisViewModel>();
+
+            ranking.Add(aux[0]);
+            ranking.Add(aux[1]);
+            ranking.Add(aux[2]);
+
+            server.BDClose(plan);
+            
+            return ranking;
+        }
+
+        public List<ContrataServicoViewModels> GetTodosServicos()
+        {
+            #region [Declarações]
+
+            HSSFWorkbook plan = new HSSFWorkbook();
+            BDService server = new BDService();
+            List<ContrataServicoViewModels> lista = new List<ContrataServicoViewModels>();
+
+            ISheet sheet = null;
+            IRow row = null;
+            ICell cellIdServico = null;
+            ICell cellIdTpServico = null;
+            ICell cellDsServico = null;
+            ICell cellIdUsuario = null;
+            ICell cellVlServico = null;
+            ICell cellNota = null;
+            ICell cellDistancia = null;
+            
+            #endregion [Declarações]
+            
+            plan = null;
+            sheet = null;
+
+            plan = server.BDInit();
+            sheet = server.BDGetFolha(plan, "SERVICOS");
+
+            row = sheet.GetRow(1);
+
+            for (int linha = 1; linha <= sheet.LastRowNum; linha++)
+            {
+                row = sheet.GetRow(linha);
+
+                if (row != null)
+                {
+                    cellIdServico = row.GetCell(0);
+                    cellIdTpServico = row.GetCell(1);
+                    cellDsServico = row.GetCell(2);
+                    cellIdUsuario = row.GetCell(3);
+                    cellVlServico = row.GetCell(9);
+                    cellNota = row.GetCell(10);
+                    cellDistancia = row.GetCell(11);
+
+                    ContrataServicoViewModels _listaAux = new ContrataServicoViewModels();
+
+                    _listaAux.IdServico = Int32.Parse(cellIdServico.ToString());
+                    _listaAux.TipoServico.IdCategoria = Int32.Parse(cellIdTpServico.ToString());
+                    _listaAux.NmServico = cellDsServico.ToString();
+                    _listaAux.Usuario.Id = Int32.Parse(cellIdUsuario.ToString());
+                    _listaAux.VlServico = Decimal.Parse(cellVlServico.ToString());
+                    _listaAux.NotaServico = Decimal.Parse(cellNota.ToString());
+                    _listaAux.Distancia = Decimal.Parse(cellDistancia.ToString());
+
+                    lista.Add(_listaAux);
+                }
+            }
+            server.BDClose(plan);
+
+            return lista;
+        }
+
+        public ContrataServicoViewModels GetServicoPorId(int IdServico)
+        {
+            ContrataServicoViewModels list = new ContrataServicoViewModels();
+
+            var retorno = GetTodosServicos().Where(x => x.IdServico == IdServico).ToList();
+
+            if(retorno != null)
+            {
+                foreach (ContrataServicoViewModels x in retorno)
+                {
+                    list = x;
+                }
+
+                var categ = GetListCategorias().Where(x => x.IdCategoria == list.TipoServico.IdCategoria).ToList();
+
+                if(categ != null)
+                {
+                    foreach(ListCategoria x in categ)
+                    {
+                        list.TipoServico = x;
+                    }
+                }
+
+                UsuarioService user = new UsuarioService();
+
+                HSSFWorkbook plan = new HSSFWorkbook();
+                BDService server = new BDService();
+
+                ISheet sheet = null;
+
+                plan = server.BDInit();
+                sheet = server.BDGetFolha(plan, "USUARIO");
+
+                var usuario = user.GetTodosUsuarios(sheet).Where(x => x.Id == list.Usuario.Id).ToList();
+
+                server.BDClose(plan);
+
+                if(usuario != null)
+                {
+                    foreach(FiltroViewModels x in usuario)
+                    {
+                        list.Usuario = x;
+                    }
+                }
+            }
+            return list;
+        }
+
+        public bool ContaServico(int IdServico)
+        {
+            HSSFWorkbook work = new HSSFWorkbook();
+            BDService bd = new BDService();
+            ISheet sheet = null;
+            IRow row = null;
+            ICell cellId = null;
+            ICell cellQt = null;
+            int _id = -1;
+            int _qtPesquisa = -1;
+
+            work = bd.BDInit();
+            sheet = bd.BDGetFolha(work, "SERVICOS");
+            
+            row = sheet.GetRow(1);
+
+            for (int linha = 1; linha <= sheet.LastRowNum; linha++)
+            {
+                row = sheet.GetRow(linha);
+
+                if (row != null)
+                {
+                    cellId = row.GetCell(0);
+
+                    _id = Int32.Parse(cellId.ToString());
+                    
+                    if(_id == IdServico)
+                    {
+                        cellQt = row.GetCell(4);
+                        _qtPesquisa = Int32.Parse(cellQt.ToString());
+
+                        _qtPesquisa++;
+
+                        row.CreateCell(4).SetCellValue(_qtPesquisa);
+                    }
+                }
+
+            }
+            
+            if (bd.BDSave(work))
+            {
+                bd.BDClose(work);
+                return true;
+            }
+
+            bd.BDClose(work);
+            return false;
+        }
     }
 }

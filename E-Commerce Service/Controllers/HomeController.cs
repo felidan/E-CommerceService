@@ -1,4 +1,5 @@
-﻿using E_Commerce_Service.Models;
+﻿using E_Commerce_Service.GlobalServices;
+using E_Commerce_Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,13 @@ namespace E_Commerce_Service.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public JsonResult LoadRanking()
+        {
+            ServicosServices servico = new ServicosServices();
+            var retorno = servico.CarregaRanking();
+            return Json(retorno);
         }
     }
 }

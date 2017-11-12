@@ -13,7 +13,7 @@ using E_Commerce_Service.GlobalServices;
 
 namespace E_Commerce_Service.Controllers
 {
-    [Authorize]
+    
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -116,6 +116,37 @@ namespace E_Commerce_Service.Controllers
             }
         }
 
+        public JsonResult LoginModel(string Email, string Senha)
+        {
+            UsuarioModels user = new UsuarioModels();
+            UsuarioService service = new UsuarioService();
+
+            user = _userService.AltenticaUsuario(Email);
+
+            if (user.Existe)
+            {
+                if (user.SenhaUsuario == Senha)
+                {
+                    Response.Cookies["userLogado"].Value = "1";
+                    Response.Cookies["userName"].Value = user.NmUsuario.ToString();
+                    Response.Cookies["userEmail"].Value = user.EmailUsuario.ToString();
+                    Response.Cookies["userPerfil"].Value = user.TpUsuario.ToString();
+                    Response.Cookies["IdUsuario"].Value = user.IdUsuario.ToString();
+
+                    return Json("OK");//RedirectToAction("ContrataServico?idServico=10", "Servicos");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Senha incorreta.");
+                    return Json("S");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Usuário não encontrado.");
+                return Json("E");
+            }
+        }
         #endregion [login]
 
         #region [VerifyCode]

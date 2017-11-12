@@ -59,6 +59,8 @@ namespace E_Commerce_Service.Controllers
 
         #endregion [Serviços - Perfil 2: Oferece serviço]
 
+        #region [Serviços - Novo Serviço]
+
         public ActionResult NovoServico()
         {
             NovoServicoViewModels model = new NovoServicoViewModels();
@@ -73,7 +75,8 @@ namespace E_Commerce_Service.Controllers
             ServicosServices servico = new ServicosServices();
             string id = Server.HtmlEncode(Request.Cookies["IdUsuario"].Value.ToString());
 
-            if( servico.InsServico(model, id, Categoria) ){
+            if (servico.InsServico(model, id, Categoria))
+            {
                 return RedirectToAction("MyServices", "Servicos");
             }
             else
@@ -83,10 +86,27 @@ namespace E_Commerce_Service.Controllers
             }
         }
 
+        #endregion [Serviços - Novo Serviço]
+
+        #region [Seriços - Contrata Serviço]
+
         public ActionResult ContrataServico(int idServico)
         {
+            ServicosServices service = new ServicosServices();
+            ContrataServicoViewModels model = new ContrataServicoViewModels();
+
+            model = service.GetServicoPorId(idServico);
             
-            return View("ContrataServico");
+            return View("ContrataServico", model);
         }
+
+        public JsonResult ContaCompra(int idServico)
+        {
+            ServicosServices servicos = new ServicosServices();
+            servicos.ContaServico(idServico);
+            return Json("");
+        }
+
+        #endregion [Seriços - Contrata Serviço]
     }
 }

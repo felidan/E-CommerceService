@@ -7,49 +7,29 @@
             <input class="form-control mr-sm-2" type="text" placeholder="encanador, pintor..." />
             <button title="Pesquisar" class="btn btn-outline-success my-2 my-sm-0" type="submit">pesquisar</button>
         </form>
-@*
-    <div class="jumbotron">
-        <h1>ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="http://asp.net" class="btn btn-primary btn-xs">Learn more &raquo;</a></p>
-    </div>
-
-*@
 
     <div id="slide">
 
     </div>
     
     <div class="row">
+
+
         <div class="col-md-4">
             <h2>Serviços mais procurados</h2>
-            <div id="idRanking"></div>
-            <p id="idListaRanking">
-                <div class="col-md-2">
-                    <h3><strong>1º </strong></h3>
-                </div>
-                <h3 class="col-md-9"><strong>Construção Civíl</strong></h3>
-                
-                <div class="col-md-2">
-                    <h4>2º </h4>
-                </div>
-                <h4 class="col-md-9">Serviço Escolar</h4>
 
-                <div class="col-md-2">
-                    <h5>3º </h5>
-                </div>
-                <h5 class="col-md-9">Domésticos</h5>
-            </p>
-            <p><a class="btn btn-outline-generic" href="/Servicos/Index">Todos os serviços &raquo;</a></p>
+            <div id="idRanking"></div>
         </div>
+
+
         <div class="col-md-4">
             <h2>Todos os serviços</h2>
             <p>
-                Com a E-Commerce Service, além de cadastrar os seus serviços você também pode divulga-los 
-                em nossas zonas de destaque.
-                <br /> Consulte nossos planos!
+                Com a E-Commerce Service, além de contratar os serviços você também pode divulga-los 
+                em nosso site.
+                <br /> Faça um cadastro com o perfil "Quero divulgar meu serviço" !
             </p>
-            <p><a class="btn btn-outline-generic" href="http://go.microsoft.com/fwlink/?LinkId=301866">Consultar planos &raquo;</a></p>
+            <p><a class="btn btn-outline-generic" href="/Account/Register">Criar perfil &raquo;</a></p>
         </div>
         <div class="col-md-4">
             <h2>Por que a E-Commerce Service irá mudar a forma como você resolve seus problemas?</h2>
@@ -71,8 +51,8 @@
 
         Init();
         CarregaSlide();
-        LoadRanking();
-
+        Ranking();
+        
     });
 
     function Init() {
@@ -88,7 +68,7 @@
         $("#slide img:eq(0)").addClass("ativo").show();
 
         var texto = $(".ativo").attr("alt");
-        $("#slide").prepend('<a href="/Home/About">' + texto + '</a>');
+        $("#slide").prepend('<a href="/Servicos/Index">' + texto + '</a>');
 
         setInterval(slide, 5000);
     }
@@ -106,6 +86,42 @@
         $("#slide a").hide().html(texto).delay(500).fadeIn();
     }
 
+    function Ranking() {
+
+        $.ajax({
+            url: '/Home/LoadRanking',
+            type: 'post',
+            data: {},
+            beforeSend: LoadRanking,
+            timeout: 5000,
+            success: function (retorno) {
+                
+                var ranking = "";
+                ranking += '<p id="idListaRanking">'
+                        + '<div class="col-md-2">'
+                        + '<h3><strong>1º </strong></h3>'
+                        + '</div>'
+                        + '<h3 class="col-md-9"><strong>' + retorno[0].NmServico + '</strong></h3>'
+                        + '<div class="col-md-2">'
+                        + '<h4>2º </h4>'
+                        + '</div>'
+                        + '<h4 class="col-md-9">' + retorno[1].NmServico + '</h4>'
+                        + '<div class="col-md-2">'
+                        + '<h5>3º </h5>'
+                        + '</div>'
+                        + '<h5 class="col-md-9">' + retorno[2].NmServico + '</h5>'
+                        + '</p>'
+                        + '<p><a class="btn btn-outline-generic" href="/Servicos/Index">Todos os serviços &raquo;</a></p>';
+
+                
+                $('#idRanking').html(ranking).show();
+                
+            },
+            error: MontaMsgErro
+        });
+
+    }
+
     function LoadRanking() {
 
         var load = "";
@@ -117,6 +133,10 @@
 
         $('#idRanking').html(load).show();
         
+    }
+
+    function MontaMsgErro(data) {
+
     }
 
 </script>
