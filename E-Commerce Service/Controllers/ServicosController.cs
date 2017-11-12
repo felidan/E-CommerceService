@@ -16,6 +16,7 @@ namespace E_Commerce_Service.Controllers
         {
             List<ServicosGeraisViewModel> servicos = new List<ServicosGeraisViewModel>();
             ServicosServices _service = new ServicosServices();
+            RatingService rating = new RatingService();
 
             ViewBag.Categorias = new SelectList( _service.GetListCategorias(), "IdCategoria", "DsCategoria");
 
@@ -28,7 +29,7 @@ namespace E_Commerce_Service.Controllers
                 servicos = _service.GetListServicos().Where(x => x.Categoria == Categorias).ToList();
             }
 
-            servicos = _service.CalculaRating(servicos, ckPreco, ckDistancia, ckAvaliacao).OrderByDescending(x => x.RatingServico).ToList();
+            servicos = rating.CalculaRating(servicos, ckPreco, ckDistancia, ckAvaliacao).OrderByDescending(x => x.RatingServico).ToList();
 
             if (Request.IsAjaxRequest())
             {
@@ -36,8 +37,7 @@ namespace E_Commerce_Service.Controllers
             }
             return View(servicos);
         }
-
-
+        
         #endregion [Serviços]
 
         #region [Serviços - Perfil 2: Oferece serviço]
@@ -58,5 +58,35 @@ namespace E_Commerce_Service.Controllers
         }
 
         #endregion [Serviços - Perfil 2: Oferece serviço]
+
+        public ActionResult NovoServico()
+        {
+            NovoServicoViewModels model = new NovoServicoViewModels();
+            ServicosServices _service = new ServicosServices();
+            ViewBag.Categorias = new SelectList(_service.GetListCategorias(), "IdCategoria", "DsCategoria");
+            ViewBag.Erro = "-1";
+            return View(model);
+        }
+
+        public ActionResult CadastrarNovoServico(NovoServicoViewModels model, string Categoria = "-1")
+        {
+            ServicosServices servico = new ServicosServices();
+            string id = Server.HtmlEncode(Request.Cookies["IdUsuario"].Value.ToString());
+
+            if( servico.InsServico(model, id, Categoria) ){
+                return RedirectToAction("MyServices", "Servicos");
+            }
+            else
+            {
+                ViewBag.Erro = "Erro ao cadastrar serviço.";
+                return RedirectToAction("NovoServico");
+            }
+        }
+
+        public ActionResult ContrataServico(int idServico)
+        {
+            
+            return View("ContrataServico");
+        }
     }
 }

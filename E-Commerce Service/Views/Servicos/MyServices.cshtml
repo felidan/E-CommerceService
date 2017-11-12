@@ -24,7 +24,7 @@
         <div class="form-group paddingFind">
             <div class="col-md-offset-2 col-md-10 paddingFind">
                 <input title="Pesquisar" type="submit" class="btn btn-outline-success" value="Pesquisar" />
-                <input title="Novo" type="submit" class="btn btn-outline-generic" value="Novo" />
+                <input id="btnNovo" title="Novo" type="submit" class="btn btn-outline-generic" value="Novo" />
             </div>
         </div>
     }
@@ -33,3 +33,13 @@
 <p><br /><hr /></p>
 
 @Html.Partial("_PartialGridMyServices", Model)
+
+<script>
+    $(document).ready(function () {
+        $('#btnNovo').click(function () {
+            var url = "/Servicos/NovoServico";
+
+            $(location).attr("href", url);
+        });
+    })
+</script>

@@ -18,7 +18,7 @@ namespace E_Commerce_Service.Models
         public decimal PrecoServico { get; set; }
 
         [Display(Name = "Distância")]
-        public float DistanciaServico { get; set; }
+        public decimal DistanciaServico { get; set; }
 
         [Display(Name = "Avaliação")]
         public decimal NotaServico { get; set; }

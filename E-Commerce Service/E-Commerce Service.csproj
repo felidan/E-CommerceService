@@ -223,6 +223,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="GlobalServices\RatingService.cs" />
     <Compile Include="GlobalServices\ServicosServices.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\FiltroMyServiceViewModel.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ListCategoria.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\NovoServicoViewModels.cs" />
     <Compile Include="Models\ServicosGeraisViewModel.cs" />
     <Compile Include="Models\TipoPerfilModels.cs" />
     <Compile Include="Models\UsuarioModels.cs" />
@@ -257,6 +259,25 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\DataTables\css\dataTables.bootstrap.css" />
+    <Content Include="Scripts\DataTables\css\dataTables.bootstrap.min.css" />
+    <Content Include="Scripts\DataTables\css\dataTables.bootstrap4.css" />
+    <Content Include="Scripts\DataTables\css\dataTables.bootstrap4.min.css" />
+    <Content Include="Scripts\DataTables\css\dataTables.foundation.css" />
+    <Content Include="Scripts\DataTables\css\dataTables.foundation.min.css" />
+    <Content Include="Scripts\DataTables\css\dataTables.jqueryui.css" />
+    <Content Include="Scripts\DataTables\css\dataTables.jqueryui.min.css" />
+    <Content Include="Scripts\DataTables\css\dataTables.semanticui.css" />
+    <Content Include="Scripts\DataTables\css\dataTables.semanticui.min.css" />
+    <Content Include="Scripts\DataTables\css\jquery.dataTables.css" />
+    <Content Include="Scripts\DataTables\css\jquery.dataTables.min.css" />
+    <Content Include="Scripts\DataTables\images\sort_asc.png" />
+    <Content Include="Scripts\DataTables\images\sort_asc_disabled.png" />
+    <Content Include="Scripts\DataTables\images\sort_both.png" />
+    <Content Include="Scripts\DataTables\images\sort_desc.png" />
+    <Content Include="Scripts\DataTables\images\sort_desc_disabled.png" />
+    <Content Include="Scripts\DataTables\js\jquery.dataTables.js" />
+    <Content Include="Scripts\DataTables\js\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -310,6 +331,8 @@
     <Content Include="Views\Servicos\MyServices.cshtml" />
     <Content Include="Views\Servicos\_PartialGridMyServices.cshtml" />
     <Content Include="Views\Servicos\_PartionGridServicosGerais.cshtml" />
+    <Content Include="Views\Servicos\ContrataServico.cshtml" />
+    <Content Include="Views\Servicos\NovoServico.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

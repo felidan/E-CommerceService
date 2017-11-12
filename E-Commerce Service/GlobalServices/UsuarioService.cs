@@ -222,16 +222,11 @@ namespace E_Commerce_Service.GlobalServices
 
             if (bd.BDSave(work))
             {
+                bd.BDClose(work);
                 return true;
             }
-
+            bd.BDClose(work);
             return false;
-        }
-
-        public bool UpdUsuario(ISheet sheet, UsuarioModels user)
-        {
-
-            return true;
         }
 
         public UsuarioModels AltenticaUsuario(string Email)
@@ -334,6 +329,40 @@ namespace E_Commerce_Service.GlobalServices
                 lista = GetTodosUsuarios(sheet);
             }
             return lista;
+        }
+
+        public int GetUsuarioPorEmail(string Email)
+        {
+            BDService bd = new BDService();
+            HSSFWorkbook plan = null;
+            ISheet sheet = null;
+            
+            plan = bd.BDInit();
+            sheet = bd.BDGetFolha(plan, "USUARIO");
+
+            IRow row = sheet.GetRow(1);
+            ICell cellId = null;
+            ICell cellEmail = null;
+            int IdUsuario = 0;
+
+            for (int linha = 1; linha <= sheet.LastRowNum; linha++)
+            {
+                if (row != null)
+                {
+                    row = sheet.GetRow(linha);
+
+                    cellEmail = row.GetCell(4);
+
+                    if (Email.Trim().ToLower() == cellEmail.ToString().Trim().ToLower())
+                    {
+                        cellId = row.GetCell(0);
+                        IdUsuario = Int32.Parse(cellId.ToString());
+                        break;
+                    }
+                }
+            }
+            bd.BDClose(plan);
+            return IdUsuario;
         }
     }
 }

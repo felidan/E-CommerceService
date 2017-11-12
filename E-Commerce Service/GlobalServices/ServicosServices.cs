@@ -273,7 +273,7 @@ namespace E_Commerce_Service.GlobalServices
                     _list.Id = Int32.Parse(IdServico.ToString());
                     _list.NmServico = NmServico.ToString();
                     _list.PrecoServico = Decimal.Parse(VlServico.ToString());
-                    _list.DistanciaServico = float.Parse(DistanciaServico.ToString());
+                    _list.DistanciaServico = Decimal.Parse(DistanciaServico.ToString());
                     _list.NotaServico = Decimal.Parse(NotaServico.ToString());
                     _list.Categoria = Categoria.ToString();
                     var tpServico = GetListCategoriasPorId(Int32.Parse(Categoria.ToString()));
@@ -289,10 +289,53 @@ namespace E_Commerce_Service.GlobalServices
 
             return lista;
         }
-
-        public List<ServicosGeraisViewModel> CalculaRating(List<ServicosGeraisViewModel> servicos, bool ckPreco, bool ckDistancia, bool ckAvaliacao)
+        
+        public bool InsServico(NovoServicoViewModels model, string IdUsuario, string categoria)
         {
-            return servicos;
+            HSSFWorkbook work = new HSSFWorkbook();
+            BDService bd = new BDService();
+            ISheet sheet = null;
+            IRow row = null;
+            ICell cellId = null;
+            int linha = 0;
+            int _id = -1;
+
+            work = bd.BDInit();
+            sheet = bd.BDGetFolha(work, "SERVICOS");
+
+            for (linha = 1; linha <= sheet.LastRowNum; linha++) ;
+
+            row = sheet.GetRow(linha - 1);
+            cellId = row.GetCell(0);
+
+            Int32.TryParse(cellId.ToString(), out _id);
+
+            if (_id == -1)
+            {
+                throw new Exception("Erro ao inserir serviço.");
+            }
+            _id++;
+
+            row = sheet.CreateRow(linha);
+
+            row.CreateCell(0).SetCellValue(_id.ToString());
+            row.CreateCell(1).SetCellValue(categoria.Trim());
+            row.CreateCell(2).SetCellValue(model.NomeServico.Trim());
+            row.CreateCell(3).SetCellValue(IdUsuario.ToString().Trim());
+            row.CreateCell(4).SetCellValue(0);
+            row.CreateCell(5).SetCellValue("N");
+            row.CreateCell(8).SetCellValue(0);
+            row.CreateCell(9).SetCellValue(model.Preco);
+            row.CreateCell(10).SetCellValue(5);
+            row.CreateCell(11).SetCellValue(model.Distancia);
+
+            if (bd.BDSave(work))
+            {
+                bd.BDClose(work);
+                return true;
+            }
+            bd.BDClose(work);
+            return false;
         }
     }
 }

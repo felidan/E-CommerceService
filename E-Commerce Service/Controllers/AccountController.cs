@@ -63,6 +63,8 @@ namespace E_Commerce_Service.Controllers
             Response.Cookies["userName"].Value = "";
             Response.Cookies["userEmail"].Value = "";
             Response.Cookies["userPerfil"].Value = "";
+            Response.Cookies["IdUsuario"].Value = "";
+            
 
             if (returnUrl == null)
             {
@@ -80,6 +82,7 @@ namespace E_Commerce_Service.Controllers
         public ActionResult Login(LoginViewModel model, string returnUrl)
         {
             UsuarioModels user = new UsuarioModels();
+            UsuarioService service = new UsuarioService();
 
             if (!ModelState.IsValid)
             {
@@ -96,6 +99,7 @@ namespace E_Commerce_Service.Controllers
                     Response.Cookies["userName"].Value = user.NmUsuario.ToString();
                     Response.Cookies["userEmail"].Value = user.EmailUsuario.ToString();
                     Response.Cookies["userPerfil"].Value = user.TpUsuario.ToString();
+                    Response.Cookies["IdUsuario"].Value = user.IdUsuario.ToString();
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -200,10 +204,13 @@ namespace E_Commerce_Service.Controllers
                 {
                     if (_userService.InsUsuario(model, TipoPefil))
                     {
+                        int id = _userService.GetUsuarioPorEmail(model.Email);
+
                         Response.Cookies["userLogado"].Value = "1";
                         Response.Cookies["userName"].Value = model.Nome.ToString();
                         Response.Cookies["userEmail"].Value = model.Email.ToString();
                         Response.Cookies["userPerfil"].Value = TipoPefil.ToString();
+                        Response.Cookies["IdUsuario"].Value = id.ToString();
 
                         return RedirectToAction("Index", "Home");
                     }
@@ -430,6 +437,7 @@ namespace E_Commerce_Service.Controllers
             Response.Cookies["userName"].Value = "";
             Response.Cookies["userEmail"].Value = "";
             Response.Cookies["userPerfil"].Value = "";
+            Response.Cookies["IdUsuario"].Value = "";
 
             return RedirectToAction("Index", "Home");
         }
