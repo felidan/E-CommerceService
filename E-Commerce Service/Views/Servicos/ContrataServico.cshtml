@@ -83,7 +83,7 @@
                             @using (Html.BeginForm("LoginModel", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                             {
                                 <div class="form-group">
-                                    @Html.Label("Login", new { @class = "col-md-2 control-label" })
+                                    @Html.Label("Email", new { @class = "col-md-2 control-label" })
                                     <div class="col-md-10">
                                         <input type="email" id="Email" name="Email" class="input-group-lg"/>
                                     </div>
@@ -151,7 +151,101 @@
     }
     else
     {
-        <p> <a href="/Account/Login"><i class="material-icons" style="width:50px; height:50px">warning</i></a> sdcsdcsdc </p>
+        <div class="container">
+            <div class="col-md-3"></div>
+            <div class="col-md-5">
+                <div class="alert alert-warning">
+                    <strong>Alerta!</strong> É necessário realizar o login para proceguir
+                    <button type="button" class="btn btn-warning" style="text-align:right;" data-toggle="modal" data-target="#myModal">Login</button>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+
+
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Login</h4>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm("LoginModel", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                            {
+                                <div class="form-group">
+                                    @Html.Label("Login", new { @class = "col-md-2 control-label" })
+                                    <div class="col-md-10">
+                                        <input type="email" id="Email" name="Email" class="input-group-lg" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Senha", new { @class = "col-md-2 control-label" })
+                                    <div class="col-md-10">
+                                        <input type="password" id="pass" name="Senha" class="input-group-lg" />
+                                    </div>
+                                </div>
+                                <p>
+                                    @Html.ActionLink("Ainda não tenho cadastro", "Register", "Account")
+                                </p>
+                                <div class="modal-footer">
+                                    <button id="btnLogin" type="submit" class="btn btn-default" data-dismiss="modal">login</button>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+
+                </div>
+            </div><div class="container">
+    <div class="col-md-3"></div>
+    <div class="col-md-5">
+        <div class="alert alert-warning">
+            <strong>Alerta!</strong> É necessário realizar o login para proceguir
+            <button type="button" class="btn btn-warning" style="text-align:right;" data-toggle="modal" data-target="#myModal">Login</button>
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+
+
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Login</h4>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm("LoginModel", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                            {
+                                <div class="form-group">
+                                    @Html.Label("Login", new { @class = "col-md-2 control-label" })
+                                    <div class="col-md-10">
+                                        <input type="email" id="Email" name="Email" class="input-group-lg" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Senha", new { @class = "col-md-2 control-label" })
+                                    <div class="col-md-10">
+                                        <input type="password" id="pass" name="Senha" class="input-group-lg" />
+                                    </div>
+                                </div>
+                                <p>
+                                    @Html.ActionLink("Ainda não tenho cadastro", "Register", "Account")
+                                </p>
+                                <div class="modal-footer">
+                                    <button id="btnLogin" type="submit" class="btn btn-default" data-dismiss="modal">login</button>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
     }
 
 @Scripts.Render("~/bundles/jquery")

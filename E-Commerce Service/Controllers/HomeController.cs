@@ -22,13 +22,6 @@ namespace E_Commerce_Service.Controllers
             return View();
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
         public JsonResult LoadRanking()
         {
             ServicosServices servico = new ServicosServices();
